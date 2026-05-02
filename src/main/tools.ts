@@ -28,12 +28,20 @@ interface BuildArgsResult {
   knownSessionId?: string  // set when we supplied the id ourselves
 }
 
+// Sub-agents run unattended — there is no UI to approve file writes or shell
+// commands, so the host's permission prompt would resolve as "denied" and the
+// run would abort. Each CLI has a flag for this; we pass it by default.
+//   claude:   --permission-mode bypassPermissions
+//   codex:    --full-auto  (alias for --ask-for-approval never --sandbox workspace-write)
+//   opencode: (no equivalent flag; opencode run is non-interactive by default)
 function buildArgs(cli: CliKind, prompt: string, sessionId: string, isNew: boolean): BuildArgsResult {
   switch (cli) {
-    case 'claude':
+    case 'claude': {
+      const base = ['--permission-mode', 'bypassPermissions', '-p', prompt]
       return isNew
-        ? { argv: ['--session-id', sessionId, '-p', prompt], knownSessionId: sessionId }
-        : { argv: ['--resume', sessionId, '-p', prompt], knownSessionId: sessionId }
+        ? { argv: ['--session-id', sessionId, ...base], knownSessionId: sessionId }
+        : { argv: ['--resume', sessionId, ...base], knownSessionId: sessionId }
+    }
     case 'opencode':
       return { argv: ['run', '--session', sessionId, prompt], knownSessionId: sessionId }
     case 'codex':
@@ -41,8 +49,8 @@ function buildArgs(cli: CliKind, prompt: string, sessionId: string, isNew: boole
       // captured previously. The placeholder in sessionMap (a uuid) is only
       // used as a map key when codex hasn't yet given us its real id.
       return isNew
-        ? { argv: ['exec', prompt] }
-        : { argv: ['exec', 'resume', sessionId, prompt] }
+        ? { argv: ['exec', '--full-auto', prompt] }
+        : { argv: ['exec', 'resume', '--full-auto', sessionId, prompt] }
   }
 }
 

@@ -1,7 +1,7 @@
 {
   "id": "rose-coding-agents",
   "name": "Coding Agents",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Headless harnesses for Claude Code, Codex, and OpenCode. Lets the host agent delegate tasks to other coding-agent CLIs in headless mode. Each ProjectRose chat session maps 1:1 to a CLI session, so follow-up tool calls in the same chat resume the same sub-agent conversation.",
   "author": "ProjectRose",
   "latin": "Rosa cohortis",
