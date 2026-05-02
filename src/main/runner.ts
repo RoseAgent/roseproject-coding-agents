@@ -12,7 +12,7 @@ const inFlight = new Set<ChildProcess>()
 export function run(
   cmd: string,
   args: string[],
-  opts: { cwd: string; timeoutMs?: number } = { cwd: process.cwd() }
+  opts: { cwd: string; timeoutMs?: number; env?: NodeJS.ProcessEnv } = { cwd: process.cwd() }
 ): Promise<RunResult> {
   const timeoutMs = opts.timeoutMs ?? 10 * 60_000
   return new Promise((resolve) => {
@@ -23,9 +23,12 @@ export function run(
     try {
       proc = spawn(cmd, args, {
         cwd: opts.cwd,
-        env: process.env,
+        env: opts.env ?? process.env,
         shell: false,
-        windowsHide: true
+        windowsHide: true,
+        // Close stdin immediately. Claude Code (and others) wait ~3s for stdin
+        // in headless mode otherwise and emit a warning before proceeding.
+        stdio: ['ignore', 'pipe', 'pipe']
       })
     } catch (err) {
       const msg = String(err)

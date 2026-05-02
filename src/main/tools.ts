@@ -76,6 +76,20 @@ function formatResult(stdout: string, stderr: string, code: number): string {
   return parts.join('\n\n')
 }
 
+// Build the env passed to the spawned CLI. For Claude Code, strip
+// ANTHROPIC_API_KEY so the CLI falls back to OAuth (Pro/Max subscription)
+// auth. Otherwise Claude Code prefers the env API key, which often points to
+// an unfunded console account and yields "Credit balance is too low" even
+// when the user's subscription has plenty of quota.
+function envForCli(cli: CliKind): NodeJS.ProcessEnv {
+  if (cli === 'claude') {
+    const env = { ...process.env }
+    delete env.ANTHROPIC_API_KEY
+    return env
+  }
+  return process.env
+}
+
 async function runCli(
   cli: CliKind,
   binary: string,
@@ -90,7 +104,7 @@ async function runCli(
   const { id: sessionId, isNew } = getOrCreateCliSessionId(toolCtx.sessionId, cli)
   const { argv } = buildArgs(cli, prompt, sessionId, isNew)
 
-  const result = await run(binary, argv, { cwd })
+  const result = await run(binary, argv, { cwd, env: envForCli(cli) })
 
   if (result.binaryMissing) {
     return `ERROR: ${binary} not found on PATH. Install the ${cli} CLI and ensure the binary is on PATH, then try again.`

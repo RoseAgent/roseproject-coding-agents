@@ -63,7 +63,10 @@ export function CodingAgentsSettings(): JSX.Element {
             Sub-agent sessions are scoped to the current ProjectRose chat: a new chat starts a fresh CLI session, and follow-up tool calls in the same chat resume the same sub-agent so it keeps prior context.
           </div>
           <div style={s.desc}>
-            Authentication is inherited from your shell environment (e.g. <code>ANTHROPIC_API_KEY</code>, <code>OPENAI_API_KEY</code>). The extension does not store secrets.
+            Authentication is inherited from your shell environment (e.g. <code>OPENAI_API_KEY</code>). The extension does not store secrets.
+          </div>
+          <div style={s.desc}>
+            <strong>Claude Code:</strong> <code>ANTHROPIC_API_KEY</code> is intentionally stripped before invoking <code>claude</code> so your Pro/Max OAuth login is used (subscription quota) instead of API console credit. Run <code>claude /login</code> once in a terminal to set up OAuth.
           </div>
         </div>
       </div>
