@@ -9,6 +9,7 @@
     "main": true,
     "globalSettings": true,
     "agentTools": true,
+    "systemPrompt": "prompts/default.md",
     "tools": [
       {
         "name": "claude_code",
