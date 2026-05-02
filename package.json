@@ -1,0 +1,17 @@
+{
+  "name": "@projectrose/rose-coding-agents",
+  "version": "0.1.0",
+  "description": "Headless harnesses for Claude Code, Codex, and OpenCode CLIs",
+  "private": true,
+  "exports": {
+    "./main": "./main.ts"
+  },
+  "scripts": {
+    "build:main": "esbuild main.ts --bundle --format=cjs --platform=node --outfile=dist/main.js --external:electron --external:@main/*",
+    "build": "npm run build:main"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.0",
+    "typescript": "^5.0.0"
+  }
+}
