@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron'
 import { run } from './runner'
-import type { CliKind, ExtensionMainContext } from './types'
+import type { CliKind } from './types'
+import type { ExtensionMainContext } from '../../../../ProjectRose/src/shared/extension-contract'
 
 export interface CliStatus {
   cli: CliKind

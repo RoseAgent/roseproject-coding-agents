@@ -1,7 +1,8 @@
 import { isAbsolute, resolve } from 'path'
 import { run } from './runner'
 import { getOrCreateCliSessionId, setCliSessionId } from './sessionMap'
-import type { CliKind, ExtensionToolCtx, ExtensionToolEntry } from './types'
+import type { CliKind } from './types'
+import type { ExtensionToolCtx, ExtensionToolEntry } from '../../../../ProjectRose/src/shared/extension-contract'
 
 // Headless-mode invocation for each supported CLI.
 //
